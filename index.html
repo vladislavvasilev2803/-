@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Название организации</title>
+
+    <link
+        rel="stylesheet"
+        href="styles.css"
+    >
+
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginPage" class="login-page">
+
+    <div class="login-card">
+
+        <div class="login-logo">
+            Emp
+            Portal
+        </div>
+
+        <h1>Название организации</h1>
+
+        <p class="login-subtitle">
+            Войдите в личный кабинет
+        </p>
+
+        <form id="loginForm">
+
+            <label>
+                Логин
+            </label>
+
+            <input
+                id="login"
+                type="text"
+                placeholder="Введите логин"
+                required
+            >
+
+            <label>
+                Пароль
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Введите пароль"
+                required
+            >
+
+            <button type="submit">
+                Войти
+            </button>
+
+        </form>
+
+        <div
+            id="loginError"
+            class="error"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- APPLICATION -->
+
+<div id="app" class="hidden">
+
+    <header>
+
+        <div class="header-inner">
+
+            <div class="logo">
+
+                <div class="logo-icon">
+                    С
+                </div>
+
+                <span>
+                    Статус сотрудников
+                </span>
+
+            </div>
+
+            <div class="user-panel">
+
+                <div>
+
+                    <strong id="userName">
+                    </strong>
+
+                    <small id="userRole">
+                    </small>
+
+                </div>
+
+                <button
+                    class="logout"
+                    onclick="logout()"
+                >
+                    Выйти
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <div class="page-heading">
+
+            <div>
+
+                <h1 id="pageTitle">
+                    Сотрудники
+                </h1>
+
+                <p id="pageSubtitle">
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <section
+            class="stats"
+            id="stats"
+        ></section>
+
+
+        <!-- FILTERS -->
+
+        <section class="panel">
+
+            <div class="filters">
+
+                <input
+                    id="search"
+                    type="text"
+                    placeholder="Поиск сотрудника..."
+                >
+
+                <select id="departmentFilter">
+                    <option value="all">
+                        Все отделы
+                    </option>
+                </select>
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        Все статусы
+                    </option>
+
+                    <option value="На работе">
+                        На работе
+                    </option>
+
+                    <option value="В отпуске">
+                        В отпуске
+                    </option>
+
+                    <option value="На больничном">
+                        На больничном
+                    </option>
+
+                    <option value="Уволен">
+                        Уволен
+                    </option>
+
+                    <option value="Командировка/удалённая работа">
+                        Командировка / удалённая работа
+                    </option>
+
+                </select>
+
+                <button
+                    id="addEmployeeButton"
+                    class="primary"
+                    onclick="openEmployeeModal()"
+                >
+                    + Добавить сотрудника
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- EMPLOYEES -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Список сотрудников
+                    </h2>
+
+                    <span id="employeeCount">
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Сотрудник
+                            </th>
+
+                            <th>
+                                Должность
+                            </th>
+
+                            <th>
+                                Отдел
+                            </th>
+
+                            <th>
+                                Статус
+                            </th>
+
+                            <th>
+                                Дата изменения
+                            </th>
+
+                            <th
+                                id="actionsHeader"
+                            >
+                                Действия
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="employeeTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADMIN -->
+
+        <section
+            id="adminSection"
+            class="admin-section hidden"
+        >
+
+            <div class="admin-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            Отделы
+                        </h2>
+
+                        <button
+                            class="primary"
+                            onclick="addDepartment()"
+                        >
+                            + Добавить
+                        </button>
+
+                    </div>
+
+                    <div id="departmentsList">
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <h2>
+                            Пользователи
+                        </h2>
+
+                        <button
+                            class="primary"
+                            onclick="openUserModal()"
+                        >
+                            + Пользователь
+                        </button>
+
+                    </div>
+
+                    <div id="usersList">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- EMPLOYEE MODAL -->
+
+<div
+    id="employeeModal"
+    class="modal hidden"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h2>
+                Сотрудник
+            </h2>
+
+            <button onclick="closeModal('employeeModal')">
+                ×
+            </button>
+
+        </div>
+
+        <form id="employeeForm">
+
+            <input
+                type="hidden"
+                id="employeeId"
+            >
+
+            <label>
+                ФИО
+            </label>
+
+            <input
+                id="employeeName"
+                required
+            >
+
+            <label>
+                Email
+            </label>
+
+            <input
+                id="employeeEmail"
+                type="email"
+            >
+
+            <label>
+                Должность
+            </label>
+
+            <input
+                id="employeePosition"
+            >
+
+            <label>
+                Отдел
+            </label>
+
+            <select
+                id="employeeDepartment"
+                required
+            ></select>
+
+            <label>
+                Статус
+            </label>
+
+            <select
+                id="employeeStatus"
+                required
+            >
+
+                <option>
+                    На работе
+                </option>
+
+                <option>
+                    В отпуске
+                </option>
+
+                <option>
+                    На больничном
+                </option>
+
+                <option>
+                    Уволен
+                </option>
+
+                <option>
+                    Командировка/удалённая работа
+                </option>
+
+            </select>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    onclick="closeModal('employeeModal')"
+                >
+                    Отмена
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary"
+                >
+                    Сохранить
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- USER MODAL -->
+
+<div
+    id="userModal"
+    class="modal hidden"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h2>
+                Новый пользователь
+            </h2>
+
+            <button onclick="closeModal('userModal')">
+                ×
+            </button>
+
+        </div>
+
+        <form id="userForm">
+
+            <label>
+                ФИО
+            </label>
+
+            <input
+                id="userFullName"
+                required
+            >
+
+            <label>
+                Логин
+            </label>
+
+            <input
+                id="userLogin"
+                required
+            >
+
+            <label>
+                Пароль
+            </label>
+
+            <input
+                id="userPassword"
+                type="password"
+                required
+            >
+
+            <label>
+                Роль
+            </label>
+
+            <select id="userRole">
+
+                <option value="manager">
+                    Руководитель
+                </option>
+
+                <option value="admin">
+                    Администратор
+                </option>
+
+            </select>
+
+            <label>
+                Отдел
+            </label>
+
+            <select id="userDepartment">
+            </select>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    onclick="closeModal('userModal')"
+                >
+                    Отмена
+                </button>
+
+                <button
+                    type="submit"
+                    class="primary"
+                >
+                    Создать
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
